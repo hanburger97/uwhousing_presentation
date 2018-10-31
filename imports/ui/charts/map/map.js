@@ -5,30 +5,66 @@ let houses = [
   {
     "name": "Abode Student Life (Icon)",
     "logo":"abode.png",
-    "address":"330 Philip St.",
-    "coord": [[43.4772287,-80.5408601]],
-    "info":[],
+    "address":["330 Philip St."],
+    "coord": [[43.4765099,-80.5410853]],
+    "info":[
+      "Laurier kids pulling fire alarm"
+    ],
     "rating": "😁😁"
   },
   {
     "name": "WRCI",
     "logo":"wcri.jpeg",
-    "address":"268 Philip St.",
+    "address":["268 Philip St."],
     "coord": [[43.4734871,-80.5365315],[43.4738065,-80.5367976], [43.4744561,-80.5372908]],
     "info":[],
-    "rating":"😡"
+    "rating":"😁"
   },
   {
     "name": "KW4Rent",
     "logo":"kw4rent.jpeg",
-    "address":"251 Lester St.",
-    "coord": [[43.4734881,-80.5369966],[43.4737512,-80.5351717],[43.4737973,-80.5343809]],
+    "address":["201 Lester St.","202 Lester St.","203 Lester St."],
+    "coord": [[43.47201, -80.53328],[43.47249, -80.53321],[43.4724, -80.53379]],
     "info":[
-      "slow_maintenance",
+      "slow maintenance",
       "unfinished",
-      "key_deposit"
+      "key deposit"
     ],
     "rating":"😡😡😡"
+  },
+  {
+    "name": "Domus",
+    "logo":"domus.png",
+    "address":["8 Hickory St","23 High St.", "330 Spruce St.", "21 Colombia St. W.", "295 Lester B."],
+    "coord": [[43.47828, -80.52622],[43.48177, -80.52849], [43.47998, -80.52685], [3.48108, -80.52795],[43.47597, -80.53652]],
+    "info":[
+      "slow maintenance",
+      "unfinished construction",
+      "key deposit"
+    ],
+    "rating":"😡😡"
+  },
+  {
+    "name": "MyRez",
+    "logo":"myrez.jpeg",
+    "address":["181 Lester St."],
+    "coord": [[43.47109, -80.53242]],
+    "info":[
+      "slow maintenance",
+      "unfinished construction",
+      "key deposit"
+    ],
+    "rating":"😡😡😡"
+  },
+  {
+    "name": "Schembri",
+    "logo":"schembri.png",
+    "address":["35 Colombia St. W.", "1 Colombia St. W.", "347 Spruce St."],
+    "coord": [[43.48059, -80.5293],[43.48147, -80.52654],[43.48081, -80.52767]],
+    "info":[
+      "construction"
+    ],
+    "rating":"😡"
   }
 ]
 
@@ -40,12 +76,10 @@ Template.map.onRendered(function () {
       iconUrl: 'images/marker.png',
       iconSize: [38, 44],
       iconAnchor: [22, 94],
-      popupAnchor: [-3, -76],
-      shadowSize: [68, 95],
-      shadowAnchor: [22, 94]
+      popupAnchor: [-3, -76]
     });
 
-    var mymap = L.map('mapid').setView([43.4753186, -80.5459518], 15);
+    var mymap = L.map('mapid').setView([43.4734871,-80.5365315], 14);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       maxZoom: 18,
@@ -55,19 +89,25 @@ Template.map.onRendered(function () {
 
     houses.forEach(function (o) {
       var coords = o['coord']
+
+      var i = 0;
       coords.forEach(function (b) {
-
         // Formatting the output content, this is disgusting yes, but no time for cleaner way
-        var content = "<h5>" + o['name'] + "</h5>"
-        content +=  o['address'] + "<br><br>"
-        content += "<img src='images/" + o['logo'] + "' style='max-height: 15px; width:auto' alt='NO LOGO'> "
-        content += "<br><br><strong>Score:</strong><h6 class='d-md-inline'>" + o['rating'] + "</h6>"
+        var content = "<h6>" + o['name'] + "</h6>"
+        content += "<img src='images/" + o['logo'] + "' style='max-height: 30px; width:auto' alt='NO LOGO'> "
+        content +=  "<br><strong>Address: </strong>"+ o['address'][i]
+        content += "<br><strong>Score:</strong><h6 class='d-md-inline'>" + o['rating'] + "</h6>"
 
+        content += "<br> <strong> Notorious for: </strong><br>"
+        o['info'].forEach(function (el) {
+          content += "<h5 class='d-md-inline'>💩</h5>" + el +"<br>"
+        })
 
         L.marker(
           b,
           {icon: myIcon, title: o['name']}
-        ).addTo(mymap).bindPopup(content).openPopup()
+        ).addTo(mymap).bindPopup(content)
+        i++
       })
     })
     
